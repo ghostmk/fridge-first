@@ -1,0 +1,11 @@
+{
+  "name": "fridge-first",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check dist/app.js && node --check dist/core.js && node --check dist/worker.js && node --check dist/journal.js && node --check dist/entry.js && node --check dist/cards.js",
+    "test": "node --test tests/*.test.js",
+    "start": "node serve.mjs"
+  }
+}

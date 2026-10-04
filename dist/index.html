@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#29392f">
+  <title>Fridge First — “Have you eaten?”</title>
+  <meta name="description" content="A small way to say you care. Cook with what you have, keep the recipes that become yours, and invite someone to dinner. Fridge First.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2329392f'/%3E%3Crect x='9' y='5' width='14' height='22' rx='2' fill='%23faf7ed'/%3E%3Cpath d='M9 13h14M12 8v3m0 5v5' stroke='%2329392f' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar"><a href="./" class="brand" aria-label="Fridge First home">fridge first<span class="brand-period">.</span></a><span class="header-note">for you, and whoever’s coming over</span></header>
+  <main>
+    <div id="file-notice" class="error" hidden>Open this app at <a href="http://localhost:4173">localhost:4173</a>. Browsers block the app’s modules when this HTML file is opened directly.</div>
+    <div id="sync-note" class="sync-note" role="alert" hidden><p>Another tab has saved newer changes. This tab’s new changes are temporary. Download a copy before reloading if you want to keep them.</p><button id="export-session" class="text-button">Download this tab’s data</button><button id="reload-saved" class="text-button">Reload saved data (discard this tab’s unsaved changes)</button></div>
+    <div class="page-heading"><div><h1>“Have you eaten?”</h1><p class="intro">A small way to say you care.<br>Even when you’re only cooking for yourself.</p></div><p class="margin-note">You bring the yogurt.<br>I’ll make dinner.</p></div>
+    <nav class="kitchen-actions" aria-label="Main kitchen actions">
+      <button id="home-pick" class="kitchen-action"><span class="action-name">Pick dinner</span><span id="home-pick-detail" class="action-detail">One less decision tonight</span></button>
+      <button id="home-book" class="kitchen-action"><span class="action-name">Recipe book</span><span id="home-book-detail" class="action-detail">The ones you’ll make again</span></button>
+      <button id="home-cooked" class="kitchen-action"><span class="action-name">I made this</span><span class="action-detail">How did it turn out?</span></button>
+      <button id="home-postcard" class="kitchen-action"><span class="action-name">Supper postcards</span><span id="home-postcard-detail" class="action-detail">Keep a little of the evening</span></button>
+      <button id="home-invite" class="kitchen-action"><span class="action-name">Invite a friend</span><span id="home-invite-detail" class="action-detail">You bring one thing. I’ll cook.</span></button>
+    </nav>
+    <div class="workspace">
+      <section class="pantry" aria-labelledby="pantry-title">
+        <p class="hand-label pantry-note">A little of this, a little of that.</p><div class="section-heading"><h2 id="pantry-title">The fridge list <span id="count" class="count">0</span></h2><button id="example" class="text-button" type="button">Fill in an example</button></div>
+        <form id="add-form"><label for="ingredient">What’s in your kitchen?</label><textarea id="ingredient" maxlength="2000" rows="2" placeholder="2 eggs, spinach, half a bag of rice" required aria-describedby="entry-hint"></textarea><div class="entry-bottom"><span id="entry-hint">Paste a list, or press Enter to add</span><button class="add-button" type="submit">Add to fridge</button></div></form>
+        <div id="quick-add" class="quick-add" aria-label="Quick-add everyday ingredients"></div>
+        <div class="inventory-header"><span>Ingredient</span><span>Use first</span></div>
+        <ul id="inventory" class="inventory"></ul>
+        <p id="inventory-empty" class="quiet empty-inventory">Half an onion? A couple of eggs?<br>They count. Start with whatever’s there.</p>
+        <p class="priority-hint">Something waiting to be used? Give it a tick.</p>
+        <fieldset class="preferences"><legend>For tonight</legend><div class="preference-row"><label for="minutes">How much time?</label><select id="minutes"><option value="15">15 minutes</option><option value="30" selected>30 minutes</option><option value="45">45 minutes</option></select></div><div class="preference-row"><label for="servings">Who’s eating?</label><select id="servings"><option value="1">1 person</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option></select></div><label class="basics"><input id="basics" type="checkbox" checked> I have oil, salt &amp; pepper</label></fieldset>
+        <button id="generate" class="primary" type="button">What could I cook?</button>
+        <button id="cancel" class="text-button cancel" type="button" hidden>Cancel</button>
+        <button id="stop-model" class="text-button" type="button" hidden>Stop Gemma and free memory</button>
+        <div class="engine-note"><p>Gemma helps with the recipes. You make them yours.<br><span id="model-note">Your list stays on this device. New ideas need a model download the first time.</span></p></div>
+        <div id="progress-wrap" hidden><progress id="progress" max="1" value="0" aria-label="Model download progress"></progress><p id="progress-text" class="quiet" role="status"></p></div>
+        <p id="error" class="error" role="alert" hidden></p>
+        <p id="storage-note" class="storage-note">Ingredients are saved on this browser.</p>
+      </section>
+      <section class="meals" aria-labelledby="meals-title" aria-busy="false">
+        <nav class="notebook-nav" aria-label="Your kitchen"><button id="tab-menu" aria-pressed="true">Tonight</button><button id="tab-book" aria-pressed="false">My recipes <span id="book-count">0</span></button><button id="tab-journal" aria-pressed="false">Supper notes <span id="journal-count">0</span></button></nav>
+        <button id="resume-invite" class="text-button" hidden>Open your invitation draft</button>
+        <div class="section-heading"><div><p id="view-kicker" class="section-kicker">A place at your table</p><h2 id="meals-title">A few possibilities</h2></div><span id="result-label" class="result-label"></span></div>
+        <div id="welcome" class="welcome"><figure class="kitchen-photo"><div class="food-image" role="img" aria-label="An illustrated plate of supper on a checked tablecloth"></div><figcaption>it starts with what’s here.</figcaption></figure><div class="welcome-content"><h3>Some recipes<br>become your recipes.</h3><p>The extra chilli you added. The friend who asked for seconds. The note that says “make this again.”</p><p>Keep those dinners here. Cook with what you have, leave a note for next time, and send someone a reason to come over.</p><button id="demo" class="secondary" type="button">Have a peek at an example</button><p class="demo-note">Three sample recipes. No download needed.</p></div><p class="handwritten-note">There’s room for one more. <span aria-hidden="true">♡</span></p></div>
+        <div id="result-message" class="result-message" role="status" hidden></div>
+        <div id="pick-tools" class="pick-tools" hidden><button id="pick-dinner" class="small-primary">Pick dinner for me</button><span class="quiet">A little help when you’ve had a long day.</span></div>
+        <div id="dinner-pick" class="dinner-pick" hidden></div>
+        <div id="recipes" class="recipes"></div>
+        <p id="recipe-note" class="recipe-note" hidden>Quantities and cooking times are estimates. Check that your ingredients are fresh and suitable before cooking.</p>
+      </section>
+    </div>
+  </main>
+  <footer><span class="footer-signoff">made for the people you feed, with <span class="heart" aria-label="love">&lt;3</span></span><span class="source-label">your recipes · your notes · your table</span></footer>
+  <div id="notice" class="notice" role="status" hidden><span id="notice-text"></span><button id="notice-action" class="text-button" hidden>Undo</button><button id="notice-dismiss" class="icon-button" aria-label="Dismiss notification">×</button></div>
+  <dialog id="recipe-dialog" aria-labelledby="modal-title"><div class="dialog-top"><span id="modal-kicker" class="section-kicker">From your kitchen</span><button id="close-dialog" class="icon-button" aria-label="Close dialog">×</button></div><div id="recipe-detail"></div></dialog>
+  <script>if(location.protocol==='file:')document.getElementById('file-notice').hidden=false;</script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
